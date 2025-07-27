@@ -1,0 +1,12 @@
+__pycache__
+
+Dockerfile
+
+/garbagefunctions/
+
+.vs/
+
+.env
+*.pyproj
+*.pyproj.user
+*pycache*
