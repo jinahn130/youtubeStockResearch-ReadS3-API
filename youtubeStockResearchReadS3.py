@@ -153,7 +153,7 @@ def lambda_handler(event, context):
         response = summary_table.query(
             KeyConditionExpression=Key("channel_id").eq(channel_id) &
                                    #ScanIndexForward=False
-                                   Key("published_at").lte("2025-09-09T23:59:59Z")
+                                   Key("published_at").lte("2025-09-08T23:59:59Z")
                                    #Key("published_at").between(date_range_str, now_str)
         )
 
