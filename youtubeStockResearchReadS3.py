@@ -74,7 +74,7 @@ def get_summaries_from_s3(channel_id, items):
         s3_key = f"{channel_id}/{date_only}/{channel_id}_{video_id}_{published_at}.json"
 
         try:
-            #This line does not fetch the file's contents yet — it just creates a handle to the object.
+            #This line does not fetch the file's contents yet ï¿½ it just creates a handle to the object.
             s3_obj = s3.Object(S3_BUCKET_NAME, s3_key)
             
             #    This actually retrieves the contents of the object using get(), which returns a dictionary.
@@ -91,7 +91,7 @@ def get_summaries_from_s3(channel_id, items):
 
 #Get error
 #Object of type Decimal is not JSON serializable on json.dumps(items)
-#Due to DynamoDB returns numbers as Decimal objects (from the decimal module), and Python’s built-in json.dumps() doesn’t know how to serialize them.
+#Due to DynamoDB returns numbers as Decimal objects (from the decimal module), and Pythonï¿½s built-in json.dumps() doesnï¿½t know how to serialize them.
 def convert_decimals(obj):
     if isinstance(obj, list):
         return [convert_decimals(i) for i in obj]
@@ -151,13 +151,14 @@ def lambda_handler(event, context):
 
     try:
         response = summary_table.query(
-            KeyConditionExpression=Key("channel_id").eq(channel_id) &
-                                   Key("published_at").between(date_range_str, now_str)
+            KeyConditionExpression=Key("channel_id").eq(channel_id),
+                                   ScanIndexForward=False
+                                   #Key("published_at").between(date_range_str, now_str)
         )
 
         #This still handles the case where the DynamoDB query returns no items
-        #If the query is successful but no matching items are found, the response will still be a valid dictionary — but "Items" will be an empty list ([]).
-        #The .get("Items", []) ensures items is always a list — either the list of matched items or an empty list if nothing was found.
+        #If the query is successful but no matching items are found, the response will still be a valid dictionary ï¿½ but "Items" will be an empty list ([]).
+        #The .get("Items", []) ensures items is always a list ï¿½ either the list of matched items or an empty list if nothing was found.
         items = response.get("Items", [])
         if not items:
             print("No dynamoDB channel_id/published_at record found for this channel for the past 2 months.")
