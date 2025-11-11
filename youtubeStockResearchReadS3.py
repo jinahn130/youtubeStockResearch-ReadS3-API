@@ -151,8 +151,9 @@ def lambda_handler(event, context):
 
     try:
         response = summary_table.query(
-            KeyConditionExpression=Key("channel_id").eq(channel_id),
-                                   ScanIndexForward=False
+            KeyConditionExpression=Key("channel_id").eq(channel_id) &
+                                   #ScanIndexForward=False
+                                   Key("published_at").lte("2025-09-09T23:59:59Z")
                                    #Key("published_at").between(date_range_str, now_str)
         )
 
@@ -195,3 +196,4 @@ def lambda_handler(event, context):
         "body": json.dumps(items_clean)
         #"body": json.dumps(summaries, indent=2),
     }
+
